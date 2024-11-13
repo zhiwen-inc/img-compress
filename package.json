@@ -1,6 +1,6 @@
 {
   "name": "img-compress",
-  "private": true,
+  "private": false,
   "version": "0.0.1",
   "type": "module",
   "scripts": {
@@ -26,5 +26,12 @@
       "types": "./dist/index.d.ts"
     },
     "./*": "./src/*"
+  },
+  "files": [
+    "dist"
+  ],
+  "author": {
+    "name": "Quark",
+    "email": "caodahong@gmail.com"
   }
 }
