@@ -1,19 +1,21 @@
 import { type CompressOptions } from './compress';
 import MyWorker from './worker?worker';
+import type { MyWorkerType } from './worker';
 
 export async function compress(files: FileList | File[], options?: CompressOptions): Promise<Blob[]> {
     const promises: Promise<Blob>[] = new Array();
     for (const file of files) {
-        const promise = new Promise<Blob>((resolve, reject) => {
+        const promise = new Promise<Blob>(async (resolve, reject) => {
             if (!file.type.startsWith('image/')) {
                 throw new Error('只支持图片压缩');
             }
+            const { sizeLimit = 30 } = options || {};
             // 小于 30Mb 的图片不压缩
-            if (file.size <= 30 << 20) {
+            if (file.size <= sizeLimit << 20) {
                 resolve(file);
                 return;
             }
-            const worker = new MyWorker;
+            const worker: MyWorkerType = new MyWorker;
             worker.onmessage = (event) => {
                 resolve(event.data);
                 worker.terminate();
@@ -22,7 +24,9 @@ export async function compress(files: FileList | File[], options?: CompressOptio
                 reject(error);
                 worker.terminate();
             };
-            worker.postMessage({ file, options });
+
+            // 使用 Transferable Objects 传递
+            worker.postMessage([file, options]);
         });
         promises.push(promise);
     }

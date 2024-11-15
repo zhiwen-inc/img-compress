@@ -1,16 +1,20 @@
 import { compress } from "../src";
-import { setupCounter } from "./counter";
+
+
 // 添加一个图片上传按钮
 const input = document.createElement('input');
+input.style.position = 'absolute';
+input.style.top = '300px';
 input.type = 'file';
 input.accept = 'image/*';
 input.multiple = true;
-input.onchange = async (): Promise<void> => {
-    console.log(input.files);
-    if (!input.files) return;
+document.body.appendChild(input);
 
+input.onchange = async (): Promise<void> => {
     try {
         console.time('compress');
+
+        if (!input.files) return;
         const blobs = await compress(input.files);
         console.timeEnd('compress');
         // 显示成功
@@ -29,9 +33,15 @@ input.onchange = async (): Promise<void> => {
     }
 }
 
-document.body.appendChild(input);
+let time = new Date().getTime();
+const show = () => {
+    const cur = new Date().getTime();
+    const timeDiff = cur - time;
+    if (timeDiff > 1000) {
+        console.log('time:', timeDiff);
+    }
+    time = cur;
+    requestAnimationFrame(show)
+}
+show();
 
-// 添加一个基础计数按钮
-const button = document.createElement('button');
-setupCounter(button)
-document.body.appendChild(button);

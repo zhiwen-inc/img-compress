@@ -1,8 +1,6 @@
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 
-// ...existing code...
-
 export default defineConfig(({ mode }) => {
     if (mode === 'lib') {
         return {
@@ -15,14 +13,7 @@ export default defineConfig(({ mode }) => {
             },
             plugins: [dts({ rollupTypes: true })]
         };
-    } else {
-        return {
-            build: {
-                outDir: 'demo-dist',
-                rollupOptions: {
-                    input: 'demo/index.html'
-                }
-            }
-        };
     }
+    // dev
+    return {};
 });
