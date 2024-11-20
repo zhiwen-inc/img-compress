@@ -1,12 +1,12 @@
 {
   "name": "img-compress",
   "private": false,
-  "version": "0.0.2",
+  "version": "0.0.5",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build --mode lib",
-    "publish": "pnpm run build && npm publish",
+    "publish": "pnpm run build && pnpm publish",
     "preview": "vite preview"
   },
   "devDependencies": {
