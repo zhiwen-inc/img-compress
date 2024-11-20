@@ -1,4 +1,4 @@
-# img minify
+# web image compression
 
 ## Project Results:
 
