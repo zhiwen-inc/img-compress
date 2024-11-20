@@ -10,8 +10,7 @@
     "dev": "vite",
     "build:dev": "tsc && vite build",
     "build:lib": "tsc && vite build --mode lib",
-    "pub": "pnpm run build:lib && pnpm publish --access public --no-git-checks",
-    "deploy": "sh deploy.sh"
+    "pub": "pnpm run build:lib && pnpm publish --access public --no-git-checks"
   },
   "devDependencies": {
     "gh-pages": "^6.2.0",
