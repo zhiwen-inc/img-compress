@@ -25,7 +25,7 @@ export async function compress(files: FileList | File[], options?: CompressOptio
                 worker.terminate();
             };
 
-            // 使用 Transferable Objects 传递
+            // file 不是 Transferable 对象，传递成本较高，但如果使用 transferable arraybuffer, 因为增加了 file -> ArrayBuffer -> file 的转换，时间成本更高，好处是减少了 gc
             worker.postMessage([file, options]);
         });
         promises.push(promise);
