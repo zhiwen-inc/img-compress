@@ -1,4 +1,4 @@
-import { compress } from "img-compress";
+import { compress } from "../src";
 
 // 添加一个图片上传按钮
 const input = document.createElement('input');
