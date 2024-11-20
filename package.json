@@ -1,31 +1,36 @@
 {
-  "name": "@zhiwen/img-compress",
+  "name": "img-compress",
   "private": false,
-  "version": "0.0.8",
+  "version": "0.0.1",
+  "main": "dist/index.umd.js",
+  "module": "dist/index.es.js",
+  "types": "dist/index.d.ts",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build:dev": "tsc && vite build",
     "build:lib": "tsc && vite build --mode lib",
-    "pub": "pnpm run build:lib && pnpm publish --no-git-checks"
+    "pub": "pnpm run build:lib && pnpm publish --access public --no-git-checks"
   },
   "devDependencies": {
     "typescript": "~5.6.2",
     "vite": "^5.4.10",
     "vite-plugin-dts": "^4.3.0"
   },
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.umd.js",
-      "default": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    },
-    "./*": "./src/*"
-  },
   "files": [
     "dist"
   ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": {
+        "development": "./src/index.ts",
+        "default": "./dist/index.es.js"
+      },
+      "require": "./dist/index.cjs.js",
+      "default": "./dist/index.es.js"
+    }
+  },
   "author": {
     "name": "Quark",
     "email": "caodahong@gmail.com"
