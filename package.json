@@ -1,5 +1,5 @@
 {
-  "name": "img-compress",
+  "name": "@h-bird/img-compress",
   "private": false,
   "version": "0.0.1",
   "main": "dist/index.umd.js",
@@ -10,7 +10,7 @@
     "dev": "vite",
     "build:dev": "tsc && vite build",
     "build:lib": "tsc && vite build --mode lib",
-    "pub": "pnpm run build:lib && pnpm publish --access public --no-git-checks"
+    "pub": "pnpm run build:lib && pnpm publish --access=public --no-git-checks"
   },
   "devDependencies": {
     "gh-pages": "^6.2.0",

@@ -1,4 +1,4 @@
-# img compress
+# img minify
 
 ## Project Results:
 
@@ -24,13 +24,13 @@ Encoding and decoding efficiency is higher, taking about 25 seconds on average (
 ### Installation
 
 ```sh
-pnpm add img-compress
+pnpm add @h-bird/img-compress
 ```
 
 ### use
 
 ```ts
-import { compress } from "img-compress";
+import { compress } from "@h-bird/img-compress";
 
 const inputElement = document.querySelector('input[type="file"]');
 inputElement.addEventListener("change", async (event) => {
@@ -68,7 +68,7 @@ inputElement.addEventListener("change", async (event) => {
 - Frontend Test: Time: 25553 ms
 - Test computer configuration:
 
-![alt text](image.png)
+![alt text](assets/image.png)
 
 #### Single 400 million pixel image compression process time analysis:
 
@@ -94,21 +94,21 @@ inputElement.addEventListener("change", async (event) => {
 #### Single 20000 x 20000 jpg image
 
 - output set to 1 x 1 jpg time chart (data transfer and encoding time can be ignored at this time):
-  ![alt text](image-4.png)
+  ![alt text](assets/image-4.png)
 
 #### Single 20000 x 20000 jpg image,
 
 - output set to 10000 x 10000 jpg time chart (image decode time is basically the same as the above, GPU time extended by 3 seconds):
-  ![alt text](image-5.png)
+  ![alt text](assets/image-5.png)
 
 #### Multiple image performance analysis:
 
 - image decoding
-  ![alt text](image-6.png)
+  ![alt text](assets/image-6.png)
 
 #### Multithreaded processing of multiple images:
 
-![alt text](image-7.png)
+![alt text](assets/image-7.png)
 
 ##### The process can be roughly divided into 3 parts:
 
@@ -118,7 +118,7 @@ inputElement.addEventListener("change", async (event) => {
 
 #### M1-pro computer test results:
 
-![alt text](image-1.png)
+![alt text](assets/image-1.png)
 It can be seen that the GPU starts rendering much faster than Intel computers because the M1-pro uses a unified memory architecture. After CPU parsing, the image data does not need to be transferred to the GPU through the bus but can directly transfer data ownership.
 
 ### Backend Simulation Test:
@@ -136,6 +136,6 @@ Time: 103.6 s
 Time: 54.6 s
 Multithreading has a significant effect on accelerating CPU compression, but since multithreading does not solve the memory wall problem, there is still a performance bottleneck. Below is the
 Rust 8-thread test data:
-![alt text](image-2.png)
+![alt text](assets/image-2.png)
 8-thread CPU usage:
-![alt text](image-3.png)
+![alt text](assets/image-3.png)
