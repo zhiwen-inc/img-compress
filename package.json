@@ -1,5 +1,5 @@
 {
-  "name": "img-compress",
+  "name": "@zhiwen/img-compress",
   "private": false,
   "version": "0.0.7",
   "type": "module",
@@ -15,12 +15,12 @@
   },
   "publishConfig": {
     "access": "public",
-    "registry": "http://192.168.3.56:4873/"
+    "registry": "https://github.com/zhiwen-inc/img-compress.git"
   },
   "exports": {
     ".": {
       "import": "./dist/index.js",
-      "require": "./dist/index.cjs",
+      "require": "./dist/index.umd.js",
       "default": "./dist/index.js",
       "types": "./dist/index.d.ts"
     },
