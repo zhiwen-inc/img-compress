@@ -9,7 +9,7 @@ export async function compress(files: FileList | File[], options?: CompressOptio
             if (!file.type.startsWith('image/')) {
                 throw new Error('只支持图片压缩');
             }
-            const { FileSizeLimit = 30 } = options || {};
+            const { fileSizeLimit: FileSizeLimit = 30 } = options || {};
             // 小于 30Mb 的图片不压缩
             if (file.size <= FileSizeLimit << 20) {
                 resolve(file);

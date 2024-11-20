@@ -14,7 +14,7 @@ export interface CompressOptions {
      * 限制图片体积大小限制，单位 Mb
      * @default 30
      */
-    FileSizeLimit?: number;
+    fileSizeLimit?: number;
 
     /**
      * 图片尺寸限制，单位 px
@@ -38,7 +38,7 @@ export async function compressImg(file: File, options?: CompressOptions): Promis
     const { type } = file;
     const bitmap = await createImageBitmap(file);
     let { width, height } = bitmap;
-    let { quality = 0.8, lenSizeLimit = 8192, FileSizeLimit = 30, useWebp = true } = options || {};
+    let { quality = 0.8, lenSizeLimit = 8192, fileSizeLimit: FileSizeLimit = 30, useWebp = true } = options || {};
     const format = useWebp ? 'image/webp' : type;
     /**max size 最大文件体积 */
     const mSize = FileSizeLimit << 20;

@@ -16,7 +16,7 @@ const inputElement = document.querySelector('input[type="file"]');
 inputElement.addEventListener("change", async (event) => {
   const files = event.target.files;
   const options = {
-    FileSizeLimit: 30, // in MB
+    fileSizeLimit: 30, // in MB
     // other options...
   };
   try {
