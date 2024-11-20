@@ -21,6 +21,12 @@ jobs:
       - name: Install pnpm
         run: npm install -g pnpm
 
+      - name: checkout branch
+        run: git checkout gh-pages
+
+      - name: merge main
+        run: git merge main
+
       - name: Install dependencies
         run: pnpm install
 
@@ -32,22 +38,3 @@ jobs:
         with:
           name: build
           path: dist/
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Download build artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: build
-          path: dist/
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
-          publish_branch: gh-pages
