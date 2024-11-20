@@ -14,6 +14,6 @@ git add -A
 git commit -m 'deploy'
 
 # 发布到 https://<USERNAME>.github.io/<REPO>
-git push -f  git@github.com:zhiwen-inc/img-compress.git main:gh-pages
+git push -f  git@github.com:zhiwen-inc/img-compress.git master:gh-pages
 
 cd -
