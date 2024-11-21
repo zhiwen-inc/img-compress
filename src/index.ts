@@ -7,7 +7,7 @@ export async function compress(files: FileList | File[], options?: CompressOptio
     for (const file of files) {
         const promise = new Promise<Blob>(async (resolve, reject) => {
             if (!file.type.startsWith('image/')) {
-                throw new Error('只支持图片压缩');
+                throw new Error('only image support');
             }
             const { fileSizeLimit: FileSizeLimit = 30 } = options || {};
             // 小于 30Mb 的图片不压缩
