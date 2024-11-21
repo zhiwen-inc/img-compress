@@ -6,9 +6,9 @@ Frontend Multithreaded Image Compression Project On the author's computer, compr
 
 ### webp encoding:
 
-It takes a bit longer, about 27 seconds (fastest 24 seconds, slowest 30 seconds), but the image size is very small, generally not exceeding 2Mb. The author visually judged that the quality did not lose much. If unsure, it can be verified by design. (It needs to be drawn in an unconventional ImageBitmap way, conventional Image drawing cannot be encoded into webp, and there is no effective error message, only a timeout error).
+It takes a bit longer due to webp coding is complex than jpg, about 27 seconds (fastest 24 seconds, slowest 30 seconds), but the image size is very small, generally not exceeding 2Mb. The author visually judged that the quality did not lose much. If unsure, it can be verified by design. (It needs to be drawn in an unconventional ImageBitmap way, conventional Image drawing cannot be encoded into webp, and there is no effective error message, only a timeout error).
 
-### png/jpg encoding:
+### jpg encoding:
 
 Encoding and decoding efficiency is higher, taking about 25 seconds on average (fastest 21 seconds), but the compressed image size is much larger, especially png, which may not change much compared to the original size, and there is a risk of needing multiple compressions.
 
