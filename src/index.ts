@@ -1,5 +1,5 @@
 import { type CompressOptions } from './compress';
-import MyWorker from './worker?worker';
+import MyWorker from './worker?worker&inline';
 import type { MyWorkerType } from './worker';
 
 export async function compress(files: FileList | File[], options?: CompressOptions): Promise<Blob[]> {

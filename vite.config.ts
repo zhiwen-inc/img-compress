@@ -8,7 +8,8 @@ export default defineConfig(({ mode }) => {
                 lib: {
                     entry: 'src/index.ts',
                     name: 'index',
-                    fileName: (format) => `index.${format}.js`
+                    formats: ['es'],
+                    fileName: `index`
                 },
             },
             plugins: [dts({ rollupTypes: true })]
