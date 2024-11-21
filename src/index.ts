@@ -32,3 +32,5 @@ export async function compress(files: FileList | File[], options?: CompressOptio
     }
     return Promise.all(promises);
 }
+
+export type { CompressOptions };

@@ -8,9 +8,15 @@ importers:
 
   .:
     devDependencies:
+      '@tweakpane/core':
+        specifier: ^2.0.5
+        version: 2.0.5
       gh-pages:
         specifier: ^6.2.0
         version: 6.2.0
+      tweakpane:
+        specifier: ^4.0.5
+        version: 4.0.5
       typescript:
         specifier: ~5.6.2
         version: 5.6.3
@@ -335,6 +341,9 @@ packages:
 
   '@rushstack/ts-command-line@4.23.0':
     resolution: {integrity: sha512-jYREBtsxduPV6ptNq8jOKp9+yx0ld1Tb/Tkdnlj8gTjazl1sF3DwX2VbluyYrNd0meWIL0bNeer7WDf5tKFjaQ==}
+
+  '@tweakpane/core@2.0.5':
+    resolution: {integrity: sha512-punBgD5rKCF5vcNo6BsSOXiDR/NSs9VM7SG65QSLJIxfRaGgj54ree9zQW6bO3pNFf3AogiGgaNODUVQRk9YqQ==}
 
   '@types/argparse@1.0.38':
     resolution: {integrity: sha512-ebDJ9b0e702Yr7pWgB0jzm+CX4Srzz8RcXtLJDJB+BSccqMa36uyH/zUsSYao5+BD1ytv3k3rPYCq4mAE1hsXA==}
@@ -769,6 +778,9 @@ packages:
     resolution: {integrity: sha512-pkonvlKk8/ZuR0D5tLW8ljt5I8kmxp2XKymhepUeOdCEfKpZaktSArkLHZt76OB1ZvO9bssUsDty4SWhLvZpLg==}
     engines: {node: '>=0.10.0'}
 
+  tweakpane@4.0.5:
+    resolution: {integrity: sha512-rxEXdSI+ArlG1RyO6FghC4ZUX8JkEfz8F3v1JuteXSV0pEtHJzyo07fcDG+NsJfN5L39kSbCYbB9cBGHyuI/tQ==}
+
   typescript@5.4.2:
     resolution: {integrity: sha512-+2/g0Fds1ERlP6JsakQQDXjZdZMM+rqpamFZJEKh4kwTIn3iDkgKtby0CeNd5ATNZ4Ry1ax15TMx0W2V+miizQ==}
     engines: {node: '>=14.17'}
@@ -1064,6 +1076,8 @@ snapshots:
       string-argv: 0.3.2
     transitivePeerDependencies:
       - '@types/node'
+
+  '@tweakpane/core@2.0.5': {}
 
   '@types/argparse@1.0.38': {}
 
@@ -1506,6 +1520,8 @@ snapshots:
   trim-repeated@1.0.0:
     dependencies:
       escape-string-regexp: 1.0.5
+
+  tweakpane@4.0.5: {}
 
   typescript@5.4.2: {}
 
