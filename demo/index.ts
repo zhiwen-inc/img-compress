@@ -13,20 +13,19 @@ document.body.appendChild(container);
 input.onchange = async (): Promise<void> => {
     try {
         console.time("compress");
-
         if (!input.files) return;
         const blobs = await compress(input.files, { useWebp: false });
         console.timeEnd("compress");
         // 显示成功
-        document.body.append("压缩成功");
+        container.append("compress success");
         // 下载 blob
         for (let i = 0; i < blobs.length; i++) {
             const blob = blobs[i];
             const url = URL.createObjectURL(blob);
             const a = document.createElement("a");
             a.href = url;
-            a.download = `compressed-${i}.${blob.type.split("/")[1]}`;
-            a.textContent = `下载-${i + 1}`;
+            a.download = `compressed-${i + 1}.${blob.type.split("/")[1]}`;
+            a.textContent = `download-${i + 1}`;
             container.appendChild(a);
         }
     } catch (error) {
