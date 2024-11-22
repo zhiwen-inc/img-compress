@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite';
+import { defineConfig, LibraryFormats } from 'vite';
 import dts from 'vite-plugin-dts';
 
 export default defineConfig(({ mode }) => {
@@ -8,7 +8,7 @@ export default defineConfig(({ mode }) => {
                 lib: {
                     entry: 'src/index.ts',
                     name: 'index',
-                    formats: ['es'],
+                    formats: ['es'] as LibraryFormats[],
                     fileName: `index`
                 },
             },
@@ -16,5 +16,7 @@ export default defineConfig(({ mode }) => {
         };
     }
     // dev
-    return {};
+    return {
+        base: './',
+    };
 });
