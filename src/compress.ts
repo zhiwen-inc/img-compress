@@ -36,7 +36,7 @@ export interface CompressOptions {
 }
 
 export async function compressImg(file: File, options?: CompressOptions): Promise<Blob> {
-    // const { type: originType, size: originSize } = file;
+    const { type: originType, size: originSize } = file;
     const bitmap = await createImageBitmap(file);
     let { width, height } = bitmap;
     let { quality = 0.9, lenSizeLimit = 8192, fileSizeLimit = 30, useWebp = true } = options || {};
@@ -63,8 +63,9 @@ export async function compressImg(file: File, options?: CompressOptions): Promis
 
     /**max len 最大尺寸 */
     const mLen = Math.min(lenSizeLimit, MaxLen);
-    let scale = 1;
-    if (area > MaxArea || width > lenSizeLimit || height > lenSizeLimit) {
+    // jpg 直接缩放尺寸
+    let scale = originType === "image/jpeg" ? Math.sqrt(mSize / originSize) : 1;
+    if (area * scale * scale > MaxArea || width * scale > mLen || height * scale > mLen) {
         scale = Math.min(Math.sqrt(MaxArea / area), mLen / width, mLen / height);
     }
 
