@@ -15,7 +15,7 @@ Encoding and decoding efficiency is higher, taking about 25 seconds on average (
 ## tech
 
 - use web worker
-- use webp format
+- support webp format
 - limit file size
 - limit img width and height
 
@@ -31,14 +31,15 @@ pnpm add @h-bird/img-compress
 
 ```ts
 import { compress } from "@h-bird/img-compress";
-
+const option: CompressOptions = {
+    useWebp: false,
+    quality: 0.9,
+    fileSizeLimit: 30,
+    lenSizeLimit: 8192,
+};
 const inputElement = document.querySelector('input[type="file"]');
 inputElement.addEventListener("change", async (event) => {
   const files = event.target.files;
-  const options = {
-    fileSizeLimit: 30, // in MB
-    // other options...
-  };
   try {
     const compressedFiles = await compress(files, options);
     // handle compressed files

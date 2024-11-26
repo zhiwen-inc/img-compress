@@ -1,16 +1,17 @@
 {
-  "name": "@h-bird/img-compress",
+  "name": "zhiwen-img-compress",
   "private": false,
-  "version": "0.0.5",
+  "version": "0.0.1",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
+  "description": "a fast tiny img compression tool for web",
   "scripts": {
     "dev": "vite",
     "build:dev": "vite build",
     "build": "tsc && vite build --mode lib",
-    "pub": "pnpm run build && pnpm publish --access=public --no-git-checks"
+    "pub": "pnpm run build && npm publish --no-git-checks"
   },
   "devDependencies": {
     "@tweakpane/core": "^2.0.5",
@@ -24,11 +25,12 @@
     "dist"
   ],
   "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/zhiwen-inc/img-compress.git"
+    "url": "git+https://github.com/zhiwen-inc/img-compress.git"
   },
   "author": {
     "name": "Quark",

@@ -40,21 +40,6 @@ export async function compressImg(file: File, options?: CompressOptions): Promis
     const bitmap = await createImageBitmap(file);
     let { width, height } = bitmap;
     let { quality = 0.9, lenSizeLimit = 8192, fileSizeLimit = 30, useWebp = true } = options || {};
-    /**计算图片解码后的理论大小 */
-    // const deComposedSize  = width * height * 4;
-    /**计算原本的压缩比 */
-    // const originCompressRate = originSize / deComposedSize;
-    // const isQualityOptimized = originCompressRate < 0.5;
-
-    // let isTypeOptimized = false;
-    // let isSizeOptimized = false;
-    /**如果原本的压缩比小于 0.5，说明图片已经被压缩过，不再通过降低质量压缩，而是类型 和 尺寸 */
-    // if (isQualityOptimized) {
-    //     isTypeOptimized = true;
-    //     isSizeOptimized = true;
-    // }
-    /**计算还需压缩多少 */
-    // const remainSize = originSize / (fileSizeLimit << 20);
 
     let type = useWebp ? "image/webp" : "image/jpeg";
     /**max size 最大文件体积 */
