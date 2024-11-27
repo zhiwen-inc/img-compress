@@ -4,7 +4,7 @@ import MyWorker from "./worker?worker&inline";
 class WorkerPool {
     size: number;
     workers?: Worker[];
-    queue: { file: Blob; options?: CompressOptions, resolve: (value: Blob | PromiseLike<Blob>) => void }[];
+    queue: { file: Blob; options?: CompressOptions; resolve: (value: Blob | PromiseLike<Blob>) => void }[];
     timer?: number;
 
     constructor(size: number) {
@@ -32,7 +32,7 @@ class WorkerPool {
         this.workers?.forEach((worker) => {
             worker.terminate();
             console.log("terminate worker -->");
-        })
+        });
         this.workers = undefined;
         this.timer = undefined;
     }
@@ -56,7 +56,7 @@ class WorkerPool {
             if (workers.length <= 0) {
                 this.queue.push({ file, options, resolve });
                 return;
-            }      
+            }
             // 有线程可用
             const worker = workers.pop()!;
             worker.onmessage = (e) => {
@@ -80,9 +80,9 @@ class WorkerPool {
     }
 }
 
-// 获取硬件并发性（CPU 核心数）
-const hardwareConcurrency = navigator.hardwareConcurrency;
-const count = Math.min(hardwareConcurrency, 10);
+// @ts-ignore 获取硬件 内存大小 并发性（CPU 核心数）
+const { deviceMemory = 8, hardwareConcurrency } = navigator;
+const count = Math.min(hardwareConcurrency, deviceMemory, 8);
 
 /**CompressEngine */
 const CEngine = new WorkerPool(count);
