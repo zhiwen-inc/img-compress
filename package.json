@@ -1,7 +1,7 @@
 {
   "name": "zhiwen-img-compress",
   "private": false,
-  "version": "0.0.7",
+  "version": "0.0.8",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -9,9 +9,9 @@
   "description": "a fast tiny img compression tool for web",
   "scripts": {
     "dev": "bunx --bun vite",
-    "build:dev": "bunx --bun vite build",
-    "build": "tsc && bunx --bun vite build --mode lib",
-    "pub": "pnpm run build && npm publish --no-git-checks"
+    "build:dev": "vite build",
+    "build": "bunx --bun vite build --mode lib",
+    "pub": "bun run build && npm publish --no-git-checks"
   },
   "devDependencies": {
     "@tweakpane/core": "^2.0.5",
