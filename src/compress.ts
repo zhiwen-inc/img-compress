@@ -35,7 +35,7 @@ export interface CompressOptions {
     useWebp?: boolean;
 }
 
-export async function compressImg(file: File, options?: CompressOptions): Promise<Blob> {
+export async function compressImg(file: Blob, options?: CompressOptions): Promise<Blob> {
     const { type: originType, size: originSize } = file;
     const bitmap = await createImageBitmap(file);
     let { width, height } = bitmap;

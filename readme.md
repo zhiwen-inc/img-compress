@@ -14,10 +14,10 @@ Encoding and decoding efficiency is higher, taking about 25 seconds on average (
 
 ## tech
 
-- use web worker
-- support webp format
-- limit file size
-- limit img width and height
+-   use web worker
+-   support webp format
+-   limit file size
+-   limit img width and height
 
 ## How to use
 
@@ -30,7 +30,7 @@ pnpm add @h-bird/img-compress
 ### use
 
 ```ts
-import { compress } from "@h-bird/img-compress";
+import CEngine, { type CompressOptions } from "zhiwen-img-compress";
 const option: CompressOptions = {
     useWebp: false,
     quality: 0.9,
@@ -39,13 +39,25 @@ const option: CompressOptions = {
 };
 const inputElement = document.querySelector('input[type="file"]');
 inputElement.addEventListener("change", async (event) => {
-  const files = event.target.files;
-  try {
-    const compressedFiles = await compress(files, options);
-    // handle compressed files
-  } catch (error) {
-    console.error("Compression error:", error);
-  }
+    for (let file of input.files) {
+        const { size: beforeSize, name } = file;
+        // do not use await in this step, which will make parallel change to serial
+        const promise = CEngine.runCompress(file, defaultConfig);
+        promise.then((blob) => {
+            // do something for blob
+        });
+    }
+
+    // or you can to in this way 
+    const promises = []
+    for (let file of input.files) {
+        const { size: beforeSize, name } = file;
+        // do not use await in this step, which will make parallel change to serial
+        const promise = CEngine.runCompress(file, defaultConfig);
+        promises.push(promise)
+    }
+    const blobs = await promise.all()
+    // do something for blobs
 });
 ```
 
@@ -53,28 +65,28 @@ inputElement.addEventListener("change", async (event) => {
 
 ### Conclusion:
 
-- When compressing ultra-large images, the huge data throughput will cause CPU/GPU stuttering. Multithreading can improve CPU encoding and decoding efficiency, but it cannot solve the memory wall or GPU issues (frontend multithreading test diagram).
-  - For example, a test image received by the author, a 20000 x 20000 jpg image, is 32 Mb before decoding, and its size will reach 1.6 Gb after full decoding. This data needs to be transferred to memory and then to video memory through the bus. The graphics card then performs 1.6 Gb data calculation and rendering. The redrawn data is then transferred back to the GPU for encoding and compression.
-  - The memory wall problem refers to the exhaustion of high-speed cache when processing ultra-large data (such as this GB-level image data), and subsequent data cannot be preloaded. The computing core capabilities cannot be fully utilized. Both CPU and GPU will encounter this problem (AI graphics cards are optimized in this regard compared to conventional graphics cards).
-  - In theory, some resources can be forcibly allocated for page refresh to reduce stuttering, but no suitable API method has been found so far (Apple's M series computers seem to have no UI stuttering, possibly due to better GPU resource scheduling).
-- Compressing oversized images can greatly reduce the file size:
-  - Currently, the maximum size of a product in our company is 250 cm. Setting the ppi to 72, the corresponding pixel size is 250 cm \* 72 px / inch / 2.54 cm/inch = 7086 px. Take 2^13 = 8096 px.
-- Using the webp format instead of png/jpg can greatly reduce the image file size:
-  - WebP is a modern image format introduced by Google that provides excellent lossless and lossy compression for images on the web. Using WebP, webmasters and web developers can create smaller, richer images that make the web faster. Most browsers now support it.
-    Using web workers (a frontend multithreading technology) can speed up image encoding and decoding.
+-   When compressing ultra-large images, the huge data throughput will cause CPU/GPU stuttering. Multithreading can improve CPU encoding and decoding efficiency, but it cannot solve the memory wall or GPU issues (frontend multithreading test diagram).
+    -   For example, a test image received by the author, a 20000 x 20000 jpg image, is 32 Mb before decoding, and its size will reach 1.6 Gb after full decoding. This data needs to be transferred to memory and then to video memory through the bus. The graphics card then performs 1.6 Gb data calculation and rendering. The redrawn data is then transferred back to the GPU for encoding and compression.
+    -   The memory wall problem refers to the exhaustion of high-speed cache when processing ultra-large data (such as this GB-level image data), and subsequent data cannot be preloaded. The computing core capabilities cannot be fully utilized. Both CPU and GPU will encounter this problem (AI graphics cards are optimized in this regard compared to conventional graphics cards).
+    -   In theory, some resources can be forcibly allocated for page refresh to reduce stuttering, but no suitable API method has been found so far (Apple's M series computers seem to have no UI stuttering, possibly due to better GPU resource scheduling).
+-   Compressing oversized images can greatly reduce the file size:
+    -   Currently, the maximum size of a product in our company is 250 cm. Setting the ppi to 72, the corresponding pixel size is 250 cm \* 72 px / inch / 2.54 cm/inch = 7086 px. Take 2^13 = 8096 px.
+-   Using the webp format instead of png/jpg can greatly reduce the image file size:
+    -   WebP is a modern image format introduced by Google that provides excellent lossless and lossy compression for images on the web. Using WebP, webmasters and web developers can create smaller, richer images that make the web faster. Most browsers now support it.
+        Using web workers (a frontend multithreading technology) can speed up image encoding and decoding.
 
 #### Experiment Details:
 
-- Original data: 10 images (2 jpeg + 8 png, average 42.25 Mb per image)
-- Frontend Test: Time: 25553 ms
-- Test computer configuration:
+-   Original data: 10 images (2 jpeg + 8 png, average 42.25 Mb per image)
+-   Frontend Test: Time: 25553 ms
+-   Test computer configuration:
 
 ![alt text](assets/image.png)
 
 #### Single 400 million pixel image compression process time analysis:
 
-- Red text indicates multithreading acceleration is possible.
-- Yellow background indicates data guessed through experimental data, with large possible errors.
+-   Red text indicates multithreading acceleration is possible.
+-   Yellow background indicates data guessed through experimental data, with large possible errors.
 
 | Process        | Data Size (Mb)                       | Max Bandwidth (Gb/s)                 | Min Time (ms)                        | Actual Time (ms) |
 | -------------- | ------------------------------------ | ------------------------------------ | ------------------------------------ | ---------------- |
@@ -94,18 +106,18 @@ inputElement.addEventListener("change", async (event) => {
 
 #### Single 20000 x 20000 jpg image
 
-- output set to 1 x 1 jpg time chart (data transfer and encoding time can be ignored at this time):
-  ![alt text](assets/image-4.png)
+-   output set to 1 x 1 jpg time chart (data transfer and encoding time can be ignored at this time):
+    ![alt text](assets/image-4.png)
 
 #### Single 20000 x 20000 jpg image,
 
-- output set to 10000 x 10000 jpg time chart (image decode time is basically the same as the above, GPU time extended by 3 seconds):
-  ![alt text](assets/image-5.png)
+-   output set to 10000 x 10000 jpg time chart (image decode time is basically the same as the above, GPU time extended by 3 seconds):
+    ![alt text](assets/image-5.png)
 
 #### Multiple image performance analysis:
 
-- image decoding
-  ![alt text](assets/image-6.png)
+-   image decoding
+    ![alt text](assets/image-6.png)
 
 #### Multithreaded processing of multiple images:
 
@@ -113,9 +125,9 @@ inputElement.addEventListener("change", async (event) => {
 
 ##### The process can be roughly divided into 3 parts:
 
-- The first part is CPU decoding + CPU data -> GPU has encountered a memory wall, opening more threads cannot accelerate, and the page stutters at this time.
-- The second part is the main part of GPU rendering (multithreading ensures that the GPU is not idle, GPU stuttering may also be due to the GPU memory wall. It is known that the big difference between AI chips and traditional graphics cards is the accelerated data reading), and the page stutters at this time.
-- The third part is the redrawn image data transfer + encoding (multithreading), the GPU is free to update the display at this time, and the page does not stutter.
+-   The first part is CPU decoding + CPU data -> GPU has encountered a memory wall, opening more threads cannot accelerate, and the page stutters at this time.
+-   The second part is the main part of GPU rendering (multithreading ensures that the GPU is not idle, GPU stuttering may also be due to the GPU memory wall. It is known that the big difference between AI chips and traditional graphics cards is the accelerated data reading), and the page stutters at this time.
+-   The third part is the redrawn image data transfer + encoding (multithreading), the GPU is free to update the display at this time, and the page does not stutter.
 
 #### M1-pro computer test results:
 

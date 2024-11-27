@@ -4,7 +4,7 @@ import MyWorker from "./worker?worker&inline";
 class WorkerPool {
     size: number;
     workers?: Worker[];
-    queue: { file: File; options?: CompressOptions, resolve: (value: Blob | PromiseLike<Blob>) => void }[];
+    queue: { file: Blob; options?: CompressOptions, resolve: (value: Blob | PromiseLike<Blob>) => void }[];
     timer?: number;
 
     constructor(size: number) {
@@ -37,7 +37,7 @@ class WorkerPool {
         this.timer = undefined;
     }
 
-    async runCompress(file: File, options?: CompressOptions) {
+    async runCompress(file: Blob, options?: CompressOptions) {
         this.resetTimer();
         if (this.workers === undefined) {
             this.init();
@@ -73,6 +73,7 @@ class WorkerPool {
                 reject(error);
                 worker.terminate();
             };
+            // TransferAble 对性能提升有限，而两边直接使用都是 blob, 所以不使用 TransferAble ArrayBuffer
             worker.postMessage([file, options]);
         });
         return promise;
