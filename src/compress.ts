@@ -35,6 +35,7 @@ export interface CompressOptions {
     useWebp?: boolean;
 }
 
+const canvas = new OffscreenCanvas(1, 1);
 export async function compressImg(file: Blob, options?: CompressOptions): Promise<Blob> {
     const { type: originType, size: originSize } = file;
     const bitmap = await createImageBitmap(file);
@@ -54,14 +55,10 @@ export async function compressImg(file: Blob, options?: CompressOptions): Promis
         scale = Math.min(Math.sqrt(MaxArea / area), mLen / width, mLen / height);
     }
 
-    width = Math.floor(width * scale);
-    height = Math.floor(height * scale);
-    const canvas = new OffscreenCanvas(1, 1);
-    
     let blob: Blob;
     do {
-        canvas.width = width = Math.floor(width * scale);
-        canvas.height = height = Math.floor(height * scale);
+        canvas.width = Math.floor(width * scale);
+        canvas.height = Math.floor(height * scale);
         const ctx = canvas.getContext("2d")!;
         ctx.scale(scale, scale);
         ctx.drawImage(bitmap, 0, 0);

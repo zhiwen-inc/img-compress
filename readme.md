@@ -23,8 +23,26 @@ Encoding and decoding efficiency is higher, taking about 25 seconds on average (
 
 ### Installation
 
+### 安装
+
+使用 pnpm:
 ```sh
-pnpm add @h-bird/img-compress
+pnpm add zhiwen-img-compress
+```
+
+使用 npm:
+```sh
+npm install zhiwen-img-compress
+```
+
+使用 yarn:
+```sh
+yarn add zhiwen-img-compress
+```
+
+使用 bun:
+```sh
+bun add zhiwen-img-compress
 ```
 
 ### use

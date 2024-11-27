@@ -32,24 +32,25 @@ document.body.appendChild(container);
 input.onchange = async (): Promise<void> => {
     try {
         if (!input.files) return;
+        const files = Array.from(input.files);
         let count = input.files.length;
         console.log("files count", count);
         console.time("compress");
         // const hash = await crypto.digest("SHA-256", await input.files[0].arrayBuffer());
-        for (let file of input.files) {
-            const { size: beforeSize, name } = file;
-            const promise = CEngine.runCompress(file, defaultConfig);
-            promise.then((blob) => {
-                const afterSize = blob.size;
-                console.log(name, "beforeSize:", beforeSize >> 20, "afterSize:", afterSize >> 20, "rate:", (afterSize / beforeSize).toFixed(2));
 
-                count--;
-                if (count === 0) {
-                    console.timeEnd("compress");
-                }
-                preDownloadForBlobs(blob);
-            });
-        }
+        files.forEach(async (file, i) => {
+            const { size: beforeSize, name } = file;
+            const blob = await CEngine.runCompress(file, defaultConfig);
+
+            const afterSize = blob.size;
+            console.log(name, "beforeSize:", beforeSize >> 20, "afterSize:", afterSize >> 20, "rate:", (afterSize / beforeSize).toFixed(2));
+
+            count--;
+            if (count === 0) {
+                console.timeEnd("compress");
+            }
+            preDownloadForBlobs(blob, i);
+        });
 
         // 下载 blob
     } catch (error) {
@@ -75,7 +76,7 @@ function preDownloadForBlobs(blob: Blob, i = 0): void {
     const a = document.createElement("a");
     a.href = url;
     a.download = `compressed-${i + 1}.${blob.type.split("/")[1]}`;
-    a.textContent = `download`;
+    a.textContent = `d-${i + 1}`;
 
     const div = document.createElement("div");
     const img = document.createElement("img");

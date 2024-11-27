@@ -31,7 +31,6 @@ class WorkerPool {
     terminateAllWorkers() {
         this.workers?.forEach((worker) => {
             worker.terminate();
-            console.log("terminate worker -->");
         });
         this.workers = undefined;
         this.timer = undefined;
