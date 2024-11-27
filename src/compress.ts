@@ -54,17 +54,23 @@ export async function compressImg(file: Blob, options?: CompressOptions): Promis
         scale = Math.min(Math.sqrt(MaxArea / area), mLen / width, mLen / height);
     }
 
+    width = Math.floor(width * scale);
+    height = Math.floor(height * scale);
+    const canvas = new OffscreenCanvas(1, 1);
+    
     let blob: Blob;
     do {
-        width = Math.floor(width * scale);
-        height = Math.floor(height * scale);
-        const canvas = new OffscreenCanvas(width, height);
+        canvas.width = width = Math.floor(width * scale);
+        canvas.height = height = Math.floor(height * scale);
         const ctx = canvas.getContext("2d")!;
         ctx.scale(scale, scale);
         ctx.drawImage(bitmap, 0, 0);
         blob = await canvas.convertToBlob({ type, quality });
         // bold size 越大，质量越差
         scale *= Math.sqrt(mSize / blob.size);
-    } while (blob.size > mSize && quality > 0.1);
+    } while (blob.size > mSize);
+    bitmap.close();
+    canvas.width = 0;
+    canvas.height = 0;
     return blob;
 }
