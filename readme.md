@@ -156,7 +156,8 @@ It can be seen that the GPU starts rendering much faster than Intel computers be
 
 The backend simulation is based on Rust implementation. The input is 8 images (because it cannot handle 20000 \* 20000 images), single compression (regardless of whether the compressed image file size meets the limit), and the output is jpg images.
 
-During the backend test, due to memory limitations, it was found that although Rust is known for its safety and high performance, the compression efficiency is not as good as the frontend compression with GPU acceleration. Geng used node + sharp (underlying C++ image processing library) with similar performance.
+During the backend test, due to memory limitations, it was found that although Rust is known for its safety and high performance, the compression efficiency is not as good as the frontend compression with GPU acceleration. 
+During testing, we also used Node.js with the Sharp library (an image processing module powered by libvips C++ library) and found it achieved similar compression performance compared to our Rust implementation, taking around 50-55 seconds to process the same 8 test images with multithreading.
 
 #### Single-threaded processing of 8 images:
 

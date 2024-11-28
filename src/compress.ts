@@ -36,13 +36,14 @@ export interface CompressOptions {
 }
 
 const canvas = new OffscreenCanvas(1, 1);
-export async function compressImg(file: Blob, options?: CompressOptions): Promise<Blob> {
-    const { type: originType, size: originSize } = file;
-    const bitmap = await createImageBitmap(file);
-    let { width, height } = bitmap;
-    let { quality = 0.9, lenSizeLimit = 8192, fileSizeLimit = 30, useWebp = true } = options || {};
+export async function compressImg(originBlob: Blob, options?: CompressOptions): Promise<Blob> {
+    const { type: originType, size: originSize } = originBlob;
+    const bitmap = await createImageBitmap(originBlob);
+    // originBlob = null as any;
+    const { width, height } = bitmap;
+    const { quality = 0.9, lenSizeLimit = 8192, fileSizeLimit = 30, useWebp = true } = options || {};
 
-    let type = useWebp ? "image/webp" : "image/jpeg";
+    const type = useWebp ? "image/webp" : "image/jpeg";
     /**max size 最大文件体积 */
     const mSize = fileSizeLimit << 20;
     const area = width * height;
@@ -55,18 +56,33 @@ export async function compressImg(file: Blob, options?: CompressOptions): Promis
         scale = Math.min(Math.sqrt(MaxArea / area), mLen / width, mLen / height);
     }
 
-    let blob: Blob;
+    let blob: Blob | null = null;
     do {
-        canvas.width = Math.floor(width * scale);
-        canvas.height = Math.floor(height * scale);
-        const ctx = canvas.getContext("2d")!;
+        const w = Math.floor(width * scale);
+        const h = Math.floor(height * scale);
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext("2d", {
+            willReadFrequently: false,
+            alpha: type === "image/webp",
+        })!;
+        // 会略微降低一点性能
+        // ctx.imageSmoothingQuality = "high";
         ctx.scale(scale, scale);
         ctx.drawImage(bitmap, 0, 0);
-        blob = await canvas.convertToBlob({ type, quality });
-        // bold size 越大，质量越差
+        try {
+            blob = await canvas.convertToBlob({ type, quality });
+        } catch (e) {
+            console.warn("error", e);
+            blob = { size: mSize << 2 } as Blob;
+        }
         scale *= Math.sqrt(mSize / blob.size);
+        // bold size 越大，质量越差
     } while (blob.size > mSize);
+
+    // 释放 bitmap 对象
     bitmap.close();
+    // 释放 canvas 对象
     canvas.width = 0;
     canvas.height = 0;
     return blob;

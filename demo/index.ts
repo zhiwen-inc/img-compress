@@ -40,6 +40,7 @@ input.onchange = async (): Promise<void> => {
 
         files.forEach(async (file, i) => {
             const { size: beforeSize, name } = file;
+            
             const blob = await CEngine.runCompress(file, defaultConfig);
 
             const afterSize = blob.size;
