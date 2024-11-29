@@ -2,7 +2,8 @@
 
 ## Project Results:
 
-Frontend Multithreaded Image Compression Project On the author's computer, compressing 10 ultra-large images (average 42.3 Mb per image) took about 25 seconds on average. Ignoring the ultra-large 400 million pixel image and its copy, the remaining 8 images can be completed in 12 seconds (for comparison, even using Rust, known for its high performance, with 8 threads to compress these 8 images takes 54 seconds).
+Frontend Multithreaded Image Compression Project 
+On the author's computer, compressing 110 ultra-large images (average 42.3 Mb per image) took about 25 seconds on average. 
 
 ### webp encoding:
 
@@ -14,10 +15,13 @@ Encoding and decoding efficiency is higher, taking about 25 seconds on average (
 
 ## tech
 
--   use web worker
+-   use web worker pool to maximize computer capabilities
 -   support webp format
 -   limit file size
 -   limit img width and height
+
+## Online Demo
+open gh-page https://zhiwen-inc.github.io/img-compress/
 
 ## How to use
 
