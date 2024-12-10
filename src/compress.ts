@@ -2,12 +2,12 @@
  * there is a size limit for canvas, the max size is 2^28, and the max length is 2^15 - 1
  * @link https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/canvas
  */
-const MaxArea = 2 ** 28;
+const MaxArea = 1 << 28;
 /**
  * there is a size limit for canvas, the max size is 2^28, and the max length is 2^15 - 1
  * @link https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/canvas
  */
-const MaxLen = 2 ** 15 - 1;
+const MaxLen = (1 << 15) - 1;
 
 export interface CompressOptions {
     /**
