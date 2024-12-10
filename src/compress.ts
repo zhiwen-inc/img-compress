@@ -17,10 +17,16 @@ export interface CompressOptions {
     fileSizeLimit?: number;
 
     /**
-     * 图片尺寸限制，单位 px，不应超过浏览器上限 16383
-     * @default 8192
+     * 图片尺寸限制，单位 px，不应超过浏览器上限 32767
+     * @default 8196
      */
     lenSizeLimit?: number;
+
+    /**
+     * 像素限制
+     * @default 268,435,456
+     */
+    pixelSizeLimit?: number;
 
     /**
      * 压缩质量
@@ -38,10 +44,14 @@ export interface CompressOptions {
 const canvas = new OffscreenCanvas(1, 1);
 export async function compressImg(originBlob: Blob, options?: CompressOptions): Promise<Blob> {
     const { type: originType, size: originSize } = originBlob;
+    const { quality = 0.9, lenSizeLimit = 1 << 13, pixelSizeLimit = 1 << 26, fileSizeLimit = 30, useWebp = true } = options || {};
+
     const bitmap = await createImageBitmap(originBlob);
     // originBlob = null as any;
     const { width, height } = bitmap;
-    const { quality = 0.9, lenSizeLimit = 8192, fileSizeLimit = 30, useWebp = true } = options || {};
+
+    const needCompress = originSize > fileSizeLimit << 20 || width * height > pixelSizeLimit || width > lenSizeLimit || height > lenSizeLimit;
+    if (!needCompress) return originBlob;
 
     const type = useWebp ? "image/webp" : "image/jpeg";
     /**max size 最大文件体积 */
@@ -50,10 +60,12 @@ export async function compressImg(originBlob: Blob, options?: CompressOptions): 
 
     /**max len 最大尺寸 */
     const mLen = Math.min(lenSizeLimit, MaxLen);
+
+    const mArea = Math.min(pixelSizeLimit, MaxArea);
     // jpg 直接缩放尺寸
     let scale = originType === "image/jpeg" ? Math.sqrt(mSize / originSize) : 1;
-    if (area * scale * scale > MaxArea || width * scale > mLen || height * scale > mLen) {
-        scale = Math.min(Math.sqrt(MaxArea / area), mLen / width, mLen / height);
+    if (area * scale * scale > mArea || width * scale > mLen || height * scale > mLen) {
+        scale = Math.min(Math.sqrt(mArea / area), mLen / width, mLen / height);
     }
 
     let blob: Blob | null = null;

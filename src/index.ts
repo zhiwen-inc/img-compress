@@ -7,7 +7,7 @@ class WorkerPool {
     queue: { file: Blob; options?: CompressOptions; resolve: (value: Blob | PromiseLike<Blob>) => void }[];
     timer?: number;
 
-    constructor(size: number) {
+    constructor (size: number) {
         this.size = size;
         this.queue = [];
     }
@@ -45,11 +45,7 @@ class WorkerPool {
         if (!file.type.startsWith("image/")) {
             throw new Error("only image support");
         }
-        const { fileSizeLimit: FileSizeLimit = 30 } = options || {};
-        // 小于 30Mb 的图片不压缩
-        if (file.size <= FileSizeLimit << 20) {
-            return file;
-        }
+
         const promise = new Promise<Blob>((resolve, reject) => {
             // 线程不够用，将任务放入队列
             if (workers.length <= 0) {

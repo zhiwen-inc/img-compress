@@ -8,6 +8,7 @@ const defaultConfig: CompressOptions = {
     quality: 0.9,
     fileSizeLimit: 30,
     lenSizeLimit: 8192,
+    pixelSizeLimit: 1 << 26,
 };
 
 // 添加一个图片上传按钮
@@ -19,7 +20,8 @@ input.multiple = true;
 pane.addBinding(defaultConfig, "useWebp", { label: "useWebp" });
 pane.addBinding(defaultConfig, "quality", { label: "quality", min: 0, max: 1 });
 pane.addBinding(defaultConfig, "fileSizeLimit", { label: "fileSizeLimit", min: 1, max: 100 });
-pane.addBinding(defaultConfig, "lenSizeLimit", { label: "lenSizeLimit", min: 1000, max: 16383 });
+pane.addBinding(defaultConfig, "lenSizeLimit", { label: "lenSizeLimit", min: 1000, max: (1 << 14) - 1 });
+pane.addBinding(defaultConfig, "pixelSizeLimit", { label: "pixelSizeLimit", min: 1 << 20, max: 1 << 28 });
 pane.addButton({ title: "upload for compress" }).on("click", () => {
     input.click();
 });
@@ -40,7 +42,7 @@ input.onchange = async (): Promise<void> => {
 
         files.forEach(async (file, i) => {
             const { size: beforeSize, name } = file;
-            
+
             const blob = await CEngine.runCompress(file, defaultConfig);
 
             const afterSize = blob.size;
@@ -77,7 +79,7 @@ function preDownloadForBlobs(blob: Blob, i = 0): void {
     const a = document.createElement("a");
     a.href = url;
     a.download = `compressed-${i + 1}.${blob.type.split("/")[1]}`;
-    a.textContent = `d-${i + 1}`;
+    a.textContent = `d-${i + 1}-${blob.size >> 10}kb`;
 
     const div = document.createElement("div");
     const img = document.createElement("img");
